@@ -8,11 +8,7 @@ class Graph:
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
 
     def __init__(self):
-        self.vertices = {
-            # 1: {2},
-            # 2: {3, 4},
-            # 7: {1, 6}
-        }
+        self.vertices = {}
 
     def add_vertex(self, vertex_id):
         """
@@ -68,14 +64,26 @@ class Graph:
         beginning from starting_vertex.
         """
         # Create an empty stack and enqueue the starting_vertex
+
+        s = Stack()
+        s.push(starting_vertex)
         # create an empty set to track visited vertices
+        visited = set()
 
         # while the stack is not empty:
+        while s.size() > 0:
             # get current vertex (pop from stack)
+            curr = s.pop()
 
             # Check if the current vertex has not been visited:
+            if curr not in visited:
+                visited.add(curr)
                 # print the current vertex
+                print(curr)
                 # Mark the current vertex as visited
+                for neighbor in self.get_neighbors(curr):
+                    s.push(neighbor)
+
                     # add the current vertex to a visited_set
 
                 # queue up all the current vertex's neighbors (so we can visit them next)
@@ -95,34 +103,37 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        queue = [(starting_vertex, [starting_vertex])]
-        while queue:
-            (vertex, path) = queue.pop(0)
-            for next in self.vertices[vertex] - set(path):
-                if next == destination_vertex:
-                    yield path + [next]
-                else:
-                    queue.append((next, path + [next]))
-
         # Create an empty queue and enqueue the PATH TO STARTING_VERTEX
+
         # create an empty set to track visited vertices
-
+        q = Queue()
+        visited = []
+        q.enqueue([starting_vertex])
         # while the queue is not empty:
+        while q.size() > 0:
             # get current vertex PATH (dequeue from queue)
+            curr_path = q.dequeue()
             # SET THE CURRENT VERTEX TO THE LAST ELEMENT OF THE PATH
-
+            curr_node = curr_path[-1]
+            print('bfs curr_node; ', curr_node)
+            # CHECK IF THE CURRENT VERTEX IS DESTINATION
+            # IF IT IS, STOP AND RETURN
+            if curr_node is destination_vertex:
+                return curr_path
             # Check if the current vertex has not been visited:
-
-                # CHECK IF THE CURRENT VERTEX IS DESTINATION
-                # IF IT IS, STOP AND RETURN
-
+            if curr_node not in visited:
+                # add the current vertex to a visited_set
                 # Mark the current vertex as visited
-                    # add the current vertex to a visited_set
+                visited.append(curr_node)
 
-                 # queue up NEW PATHS WITH EACH NEIGHBOR:
+                for neighbor in self.get_neighbors(curr_node):
                     # TAKE CURRENT PATH
+                    new_path = curr_path.copy()
                     # APPEND THE NEIGHBOR TO IT
+                    new_path.append(neighbor)
                     # QUEUE UP NEW PATH
+                    q.enqueue(new_path)
+                    # queue up NEW PATHS WITH EACH NEIGHBOR:
 
     def dfs(self, starting_vertex, destination_vertex):
         """
