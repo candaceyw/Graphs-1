@@ -76,8 +76,7 @@ class SocialGraph:
             self.add_friendship(friendship[0], friendship[1])
 
     def get_friends(self, user_id):
-        friends = self.friendships[user_id]
-        return friends
+        return self.friendships[user_id]
 
     def get_all_social_paths(self, user_id):
         """
