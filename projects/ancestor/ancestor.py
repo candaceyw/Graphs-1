@@ -34,6 +34,7 @@ def earliest_ancestor(ancestors, starting_node):
             visited.add(current_node)
 
             # See if the current node is less than the parent then
+            # ances
             if (current_node < ancestor) or (len(current_path) > 1):
                 # set the parent as the current node
                 ancestor = current_node

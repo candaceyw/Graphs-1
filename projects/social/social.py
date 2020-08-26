@@ -1,8 +1,12 @@
 import random
 
+from projects.graph.util import Queue
+
+
 class User:
     def __init__(self, name):
         self.name = name
+
 
 class SocialGraph:
     def __init__(self):
@@ -49,7 +53,7 @@ class SocialGraph:
         self.friendships = {}
         # Add users
         for i in range(0, num_users):
-            self.add_user(f"User {i+1}")
+            self.add_user(f"User {i + 1}")
 
         # Create friendships
         # Generate ALL possible friendships
@@ -60,8 +64,8 @@ class SocialGraph:
                 # user_id == user_id_2 cannot happen
                 # if friendship between user_id and user_id_2 already exists
                 #   dont add friendship between user_id_2 and user_id
-                possible_friendships.append( (user_id, friend_id) )
-            
+                possible_friendships.append((user_id, friend_id))
+
         # Randomly select X friendships
         # the formula for X is  num_users * avg_friendships  // 2 
         # shuffle the array and pick X elements from the front of it
@@ -71,6 +75,9 @@ class SocialGraph:
             friendship = possible_friendships[i]
             self.add_friendship(friendship[0], friendship[1])
 
+    def get_friends(self, user_id):
+        friends = self.friendships[user_id]
+        return friends
 
     def get_all_social_paths(self, user_id):
         """
@@ -83,6 +90,31 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+
+        # create an empty queue to track visited vertices
+        q = Queue()
+        q.enqueue([user_id])
+        # while queue is not empty
+        while q.size() > 0:
+            # get current path (dequeue)
+            curr_path = q.dequeue()
+            # set the current user to the last element of the path
+            curr_user = curr_path[-1]
+
+            # if current user has not been visited:
+            if curr_user not in visited:
+                # current user in visited = current path
+                visited[curr_user] = curr_path
+
+                for friend in self.get_friends(curr_user):
+                    # take current path
+                    new_path = curr_path.copy()
+                    # append the friend
+                    new_path.append(friend)
+
+                    # queue up new path
+                    q.enqueue(new_path)
+
         return visited
 
 
